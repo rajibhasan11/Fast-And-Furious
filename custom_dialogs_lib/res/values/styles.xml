@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item name="id" type="id"/>
+
+    <color name="ad_btn_text_color">#ff525967</color>
+    <color name="dialog_ui_title_color">#ff333333</color>
+    <color name="dialog_ui_msg_color">#ff666666</color>
+    <color name="transparent">#00000000</color>
+
+    <dimen name="dialog_padding_top">5.5dip</dimen>
+    <dimen name="dialog_topbar_padding_left">20dip</dimen>
+    <dimen name="dialog_topbar_padding_right">20dip</dimen>
+    <dimen name="dialog_btn_height">40dip</dimen>
+    <dimen name="dialog_btn_group_height">60dip</dimen>
+
+    <integer name="slide_ani_time">300</integer>
+    <integer name="fade_ani_time">400</integer>
+
+    <style name="Dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="DialogText">
+        <item name="android:textColor">#FF000000</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="DialogText.Title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DimLess.Transparent" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <declare-styleable name="CustomDialog">
+        <attr name="btnPopBg" format="reference" />
+        <attr name="popupBg" format="reference" />
+        <attr name="popPasswordIcon" format="reference" />
+        <attr name="popupTopbarBg" format="reference" />
+        <attr name="popupListLine" format="reference" />
+    </declare-styleable>
+
+</resources>

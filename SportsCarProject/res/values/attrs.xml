@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="margin_left" format="dimension" />
+    <attr name="margin_right" format="dimension" />
+    <attr name="margin_middle" format="dimension" />
+    <attr name="height" format="dimension" />
+    <attr name="index_count" format="integer" />
+    <attr name="anim_time" format="integer" />
+    <attr name="indicator" format="reference" />
+    <attr name="text_title" format="reference|string" />
+    <attr name="text_summary" format="reference|string" />
+    <attr name="text_button" format="reference|string" />
+    <attr name="show_summary" format="boolean" />
+    <attr name="url" format="reference|string" />
+    <attr name="title_texts" format="reference|string" />
+    <attr name="text" format="reference|string" />
+    <attr name="hint" format="reference|string" />
+    <attr name="textColor" format="reference|color" />
+    <attr name="hintColor" format="reference|color" />
+    <attr name="textPassword" format="boolean" />
+    <attr name="background" format="reference" />
+    <attr name="max_chars" format="integer" />
+    <attr name="digits" format="reference|string" />
+    <attr name="gd_icon" format="reference" />
+    <attr name="gd_title" format="reference" />
+    <attr name="gd_content" format="reference" />
+    <attr name="gd_button_text" format="reference" />
+    <attr name="gd_cloud_drawable" format="reference" />
+    <attr name="gd_cloud_animate_time" format="integer" />
+    <attr name="gd_cloud_animate_left" format="boolean" />
+    <attr name="selectedColor" format="color" />
+    <attr name="centered" format="boolean" />
+    <attr name="strokeWidth" format="dimension" />
+
+</resources>

@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    tools:context=".SportsCarListActivity" >
+
+    <ImageView
+        android:id="@+id/holoTop"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/abs_list_divider_holo_light"
+        android:contentDescription="@string/app_name" />
+
+    <ImageView
+        android:id="@+id/ivLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="8dip"
+        android:contentDescription="@string/app_name"
+        android:gravity="center"
+        android:src="@drawable/ic_exit" />
+
+    <TextView
+        android:id="@+id/hiUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="8dip"
+        android:gravity="center"
+        android:text="@string/hi"
+        android:textColor="#888888"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/holoBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/abs_list_divider_holo_light"
+        android:contentDescription="@string/app_name" />
+
+</RelativeLayout>

@@ -1,0 +1,3 @@
+#Tomcat publish data
+#Sun Apr 20 23:39:47 BDT 2014
+org.eclipse.jst.jee.server\:RESTJersyWebServices=C\:\\Desktop_Works\\Work\\Downloads\\apache-tomcat-7.0.53\\wtpwebapps\\RESTJersyWebServices

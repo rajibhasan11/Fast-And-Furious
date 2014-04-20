@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SportsCar">
+	
+	<resultMap id="result" type="SportsCar">
+	    <result property="id" column="idCar"/>
+	    <result property="model" column="model"/>
+	    <result property="manufacturer" column="manufacturer"/>
+	    <result property="style" column="style"/>
+	    <result property="origin" column="origin"/>
+    </resultMap>
+	
+    <select id="getAll" resultMap="result">
+    	SELECT * FROM sportscar
+    </select>
+    
+    <select id="getById" parameterType="int" resultMap="result">
+    	SELECT * FROM sportscar WHERE idCar = #{id}
+  	</select>
+
+</mapper>

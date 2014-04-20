@@ -1,0 +1,1 @@
+UPDATE user SET Password = PASSWORD('12345678') WHERE User = 'root'; 

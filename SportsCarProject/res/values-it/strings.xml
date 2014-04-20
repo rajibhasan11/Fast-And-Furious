@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sports Car</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="std_loading_text">Caricamento…</string>
+    <string name="manufactureModel_label">Produttore (Modello)</string>
+    <string name="model_label">Modello:</string>
+    <string name="manufacturer_label">Produttore:</string>
+    <string name="style_label">Stile:</string>
+    <string name="country_of_origin_label">Paese d\'origine:</string>
+    <string name="username_hint">Utente</string>
+    <string name="password_hint">Password</string>
+    <string name="login_btn_text">Accedi</string>
+    <string name="lg_input_email_empty">Email richiesta</string>
+    <string name="lg_input_pwd_empty">Password richiesta</string>
+    <string name="internet_dialog_title">Nessun rete</string>
+    <string name="internet_dialog_message">Impossibile connettersi a Internet. Controllare le impostazioni di connessione e riprovare.</string>
+    <string name="gps_dialog_positive_btn">Impostazioni</string>
+    <string name="gps_dialog_title">GPS impostazioni</string>
+    <string name="gps_dialog_negative_btn">Annulla</string>
+    <string name="login_progress_text">Accesso in corso…</string>
+    <string name="ok">OK</string>
+    <string name="login_failure_title">Accesso fallito</string>
+    <string name="login_failure_text">Accesso fallito. Utente or password è invalida.</string>
+    <string name="unknown_error_title">Errore</string>
+    <string name="unknown_error_message">Something went wrong during login. Please try again.</string>
+    <string name="error_message">Nessun data o nessun rete</string>
+    <string name="lg_input_email_invalid">Email invalida</string>
+    <string name="hi">Ciao,</string>
+    <string name="listview_header">Sports Cars</string>
+    <string name="detailview_header">Car Details</string>
+
+</resources>
