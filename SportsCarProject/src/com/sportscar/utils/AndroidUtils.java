@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
@@ -211,34 +210,6 @@ public final class AndroidUtils {
 	            }
 	        });
 	    }
-	}
-	
-	// Change argument for dynamicity of fill color, corner radius, stroke width (instead only strokecolor send styleMap)
-	public static void onDrawBoarder(final View curView, final int strokeColor, final String bgType){
-		final GradientDrawable gd = new GradientDrawable();
-		if(curView != null && bgType != null && strokeColor != 0) {
-			if(bgType.equalsIgnoreCase("onFocus")) {
-				curView.setOnTouchListener(new View.OnTouchListener() {
-					public boolean onTouch(View view, MotionEvent motionEvent) {
-						gd.setColor(Color.WHITE);
-						gd.setCornerRadius(4);
-						gd.setStroke(2, strokeColor);
-						curView.setBackgroundDrawable(gd);
-				        return false;
-				    }
-				});
-			} else {
-				gd.setColor(Color.WHITE);
-				gd.setCornerRadius(4);
-				gd.setStroke(2, strokeColor);
-				curView.setBackgroundDrawable(gd);
-			}
-		} else {
-			gd.setColor(Color.WHITE);
-			gd.setCornerRadius(4);
-			gd.setStroke(2, strokeColor);
-			curView.setBackgroundDrawable(gd);
-		}
 	}
 	
 	public static float getDensity(Activity activity){

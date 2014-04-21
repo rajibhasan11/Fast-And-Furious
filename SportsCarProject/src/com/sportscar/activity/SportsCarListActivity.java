@@ -49,6 +49,7 @@ import com.sportscar.utils.CursorUtils;
 import com.sportscar.utils.NetConnectionUtil;
 import com.sportscar.utils.SDK11;
 import com.sportscar.utils.SessionProvider;
+import com.sportscar.utils.StringsUtils;
 
 public class SportsCarListActivity extends FragmentActivity implements ISportsCar {
 
@@ -74,6 +75,14 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
         dbLogin = new DBLogin(mContext);
         mDatabaseHelper = SQLiteHelper.getInstance(mContext);
         tvErrorMsg = (TextView) findViewById(R.id.errorMessage);
+        tvErrorMsg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(view != null) {
+					executeCarsLoadTask();
+				}
+			}
+		});
         
         // Set greetings
         hiUser = (TextView) findViewById(R.id.hiUser);
@@ -81,7 +90,7 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 		if (loginMap.size() > 1) {
 			String userFirstName = loginMap.get(DBLogin.KEY_USER_FIRST_NAME);
 			if(!TextUtils.isEmpty(userFirstName)) {
-				hiUser.setText(getString(R.string.hi) + " " + capitalizeFirstLetter(userFirstName));
+				hiUser.setText(getString(R.string.hi) + " " + StringsUtils.capitalizeFirstLetter(userFirstName));
 				hiUser.setVisibility(View.VISIBLE);
 			}
 		}
@@ -110,18 +119,7 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 								| DateUtils.FORMAT_SHOW_DATE
 								| DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				if (mSportsCarLoadTask != null) {
-					mSportsCarLoadTask.cancel(true);
-				}
-				mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
-				try {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-						SDK11.executeOnThreadPool(mSportsCarLoadTask, mSportsCarLoadTask.setupRequest());
-					} else {
-						mSportsCarLoadTask.execute(mSportsCarLoadTask.setupRequest());
-					}
-				} catch (RejectedExecutionException e) {
-				}
+				executeCarsLoadTask();
 			}
 		});
         
@@ -145,7 +143,14 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 				startActivity(intent);
 			}
 		});
-        mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
+        executeCarsLoadTask();
+    }
+    
+    private void executeCarsLoadTask() {
+    	if(mSportsCarLoadTask != null) {
+    		mSportsCarLoadTask.cancel(true);
+    	}
+    	mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
 		try {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 				SDK11.executeOnThreadPool(mSportsCarLoadTask, mSportsCarLoadTask.setupRequest());
@@ -155,24 +160,6 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 		} catch (RejectedExecutionException e) {
 		}
     }
-    
-    private String capitalizeFirstLetter(String word){
-		if(word != null){
-			word = word.trim();
-			if(word.length() > 0){
-				if(word.length() == 1){
-					return word.toUpperCase();
-				}
-				if(word.length() > 1){
-					return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
-				}
-			}
-			if(word.length() == 0){
-				return word;
-			}
-		}
-		return "";
-	}
     
     private void removeSession() {
 		dbLogin.deleteAllRows();

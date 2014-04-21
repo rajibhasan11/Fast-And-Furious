@@ -31,6 +31,7 @@ import com.sportscar.utils.CursorUtils;
 import com.sportscar.utils.NetConnectionUtil;
 import com.sportscar.utils.SDK11;
 import com.sportscar.utils.SessionProvider;
+import com.sportscar.utils.StringsUtils;
 
 public class SportsCarDetailActivity extends FragmentActivity implements ISportsCar {
 
@@ -59,7 +60,7 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 		if (loginMap.size() > 1) {
 			String userFirstName = loginMap.get(DBLogin.KEY_USER_FIRST_NAME);
 			if(!TextUtils.isEmpty(userFirstName)) {
-				hiUser.setText(getString(R.string.hi) + " " + capitalizeFirstLetter(userFirstName));
+				hiUser.setText(getString(R.string.hi) + " " + StringsUtils.capitalizeFirstLetter(userFirstName));
 				hiUser.setVisibility(View.VISIBLE);
 			}
 		}
@@ -122,24 +123,6 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 		Intent in = new Intent(mContext, LoginViewActivity.class);
 		startActivity(in);
 		finish();
-	}
-	
-	private String capitalizeFirstLetter(String word){
-		if(word != null){
-			word = word.trim();
-			if(word.length() > 0){
-				if(word.length() == 1){
-					return word.toUpperCase();
-				}
-				if(word.length() > 1){
-					return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
-				}
-			}
-			if(word.length() == 0){
-				return word;
-			}
-		}
-		return "";
 	}
 	
 	private class SportsCarLoadTask extends AsyncTaskHelper {

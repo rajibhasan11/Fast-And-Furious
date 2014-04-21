@@ -57,39 +57,6 @@ public final class AppPreference implements IAppPreference {
 		return "";
 	}
 	
-	/*public boolean putStringSet(String valueKey, Set<String> value) {
-		if(mContext == null || TextUtils.isEmpty(valueKey) || value == null){
-			try {
-				throw new Exception();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		if(mContext != null){
-		    SharedPreferences.Editor editor = mSettings.edit();
-		    editor.putStringSet(valueKey, value);
-			if(!editor.commit()){
-				return false;
-			}
-		    return true;
-		}
-		return false;
-	}
-	
-	public Set<String> getStringSet(String valueKey) {
-		if(mContext == null || TextUtils.isEmpty(valueKey)){
-			try {
-				throw new Exception();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		if(mContext != null) {
-			return mSettings.getStringSet(valueKey, null);
-		}
-		return null;
-	}*/
-	
 	public boolean putInt(String valueKey, int value) {
 		if(mContext == null || TextUtils.isEmpty(valueKey) || value < 0){
 			try {
