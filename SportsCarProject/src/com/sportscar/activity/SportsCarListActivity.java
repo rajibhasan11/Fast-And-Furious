@@ -183,6 +183,8 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 			if(result != null && result.size() > 0){
 				mSportsCarAdapter = new SportsCarAdapter(mContext, getListRow(), result);
 				mListView.setAdapter(mSportsCarAdapter);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
+	    		tvErrorMsg.setVisibility(View.GONE);
 			} else {
 				dismissProgressDialog(mProgressDialog);
 				offlineListView();
@@ -263,6 +265,8 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 			if (c.getCount() > 0) {
 				mSportsCarAdapter = new SportsCarAdapter(mContext, getListRow(), CursorUtils.converter(c));
 				mListView.setAdapter(mSportsCarAdapter);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
+	    		tvErrorMsg.setVisibility(View.GONE);
 			} else {
 				// NO DATA OFFLINE CASE
 				handleExceptions();

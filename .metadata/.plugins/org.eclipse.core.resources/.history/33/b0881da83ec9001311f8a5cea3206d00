@@ -1,0 +1,33 @@
+/********************************************************
+ *
+ * @author: Mohammad Hasan Khan email: rajibhasan11@gmail.com
+ * @date: 19/04/2014
+ * 
+ * ********************************************/
+package com.sportscar.app;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.mkh.customdialogs.CustomProgressDialog;
+
+import android.app.Activity;
+import android.view.View;
+
+public interface IAsyncTask {
+	
+	// String BASEURL = "http://180.234.41.33:8080/RESTJersyWebServices/rest/"; // For Real Client
+	
+	// String BASEURL = "http://192.168.10.1:8080/RESTJersyWebServices/rest/"; // For Real Client
+	
+	// String BASEURL = "http://localhost:8080/RESTJersyWebServices/rest/"; // For Real Device
+	
+	// String BASEURL = "http://10.0.2.2:8080/RESTJersyWebServices/rest/"; // For Emulator
+	
+	void onPrePostExecute(CopyOnWriteArrayList<ConcurrentHashMap<String, String>> result);
+	String setupRequest();
+	String queryRESTurl(Activity activity, String url, View eView, View pBar);
+	CustomProgressDialog showProgressDialog(CustomProgressDialog p);
+    void dismissProgressDialog(CustomProgressDialog p);
+
+}

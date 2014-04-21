@@ -108,7 +108,6 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
         	String modelStr = cursor.getString(cursor.getColumnIndex(MODEL));
         	String styleStr = cursor.getString(cursor.getColumnIndex(STYLE));
         	String originStr = cursor.getString(cursor.getColumnIndex(ORIGIN));
-        	CursorUtils.manageCursor(cursor);
         	
         	manufacturerModel.setText(manufacturerStr + " (" + modelStr + ")");
         	model.setText(modelStr);
@@ -116,6 +115,7 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
         	style.setText(styleStr);
         	origin.setText(originStr);
 		}
+		CursorUtils.manageCursor(cursor);
 	}
 	
 	private void removeSession() {
