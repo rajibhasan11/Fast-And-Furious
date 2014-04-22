@@ -17,11 +17,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.sportscar.app.AsyncTaskHelper;
 import com.sportscar.app.ISportsCar;
 import com.sportscar.app.R;
@@ -43,6 +48,8 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 	
 	private ImageView ivLogOut;
 	private DBLogin dbLogin;
+	private PullToRefreshScrollView mPullRefreshScrollView;
+	private String mId = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,53 +61,67 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
         dbLogin = new DBLogin(mContext);
         mDatabaseHelper = SQLiteHelper.getInstance(mContext);
         
-        // Set greetings
-        hiUser = (TextView) findViewById(R.id.hiUser);
-        HashMap<String, String> loginMap = SessionProvider.sessionManager(mContext);
-		if (loginMap.size() > 1) {
-			String userFirstName = loginMap.get(DBLogin.KEY_USER_FIRST_NAME);
-			if(!TextUtils.isEmpty(userFirstName)) {
-				hiUser.setText(getString(R.string.hi) + " " + StringsUtils.capitalizeFirstLetter(userFirstName));
-				hiUser.setVisibility(View.VISIBLE);
-			}
-		}
-		
-		// Set logout functionality
-        ivLogOut = (ImageView) findViewById(R.id.ivLogOut);
-        ivLogOut.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if(view != null) {
-					removeSession();
+        Intent in = getIntent();
+        mId = in.getStringExtra(ID);
+    	
+        if(findViewCorrectly() && !TextUtils.isEmpty(mId)) {
+        	mPullRefreshScrollView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+				@Override
+				public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+					if (NetConnectionUtil.haveNetConnection(mContext)) {
+						String label = DateUtils.formatDateTime(
+								getApplicationContext(),
+								System.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+						executeDataLoadTask();
+					} else {
+						offlineSetData(mId);
+					}
 				}
-			}
-		});
-        
-        if(findViewCorrectly()) {
-        	Intent in = getIntent();
-        	if(in != null) {
-        		String id = in.getStringExtra(ID);
-        		Log(id+" onDetail");
-        		if(!TextUtils.isEmpty(id)) {
-        			if(NetConnectionUtil.haveNetConnection(mContext)) {
-        				mSportsCarLoadTask = new SportsCarLoadTask(mContext, true, id);
-        				try {
-        					String url = mSportsCarLoadTask.setupRequest() + id;
-        					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        						SDK11.executeOnThreadPool(mSportsCarLoadTask, url);
-        					} else {
-        						mSportsCarLoadTask.execute(url);
-        					}
-        				} catch (RejectedExecutionException e) {
-        				}
-        			} else {
-        				offlineSetData(id);
-        			}
-        		}
-        	}
+			});
+        	
+        	// Set greetings
+            HashMap<String, String> loginMap = SessionProvider.sessionManager(mContext);
+    		if (loginMap.size() > 1) {
+    			String userFirstName = loginMap.get(DBLogin.KEY_USER_FIRST_NAME);
+    			if(!TextUtils.isEmpty(userFirstName)) {
+    				hiUser.setText(getString(R.string.hi) + " " + StringsUtils.capitalizeFirstLetter(userFirstName));
+    				hiUser.setVisibility(View.VISIBLE);
+    			}
+    		}
+    		
+    		// Set logout functionality
+            ivLogOut.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View view) {
+    				if(view != null) {
+    					removeSession();
+    				}
+    			}
+    		});
+            executeDataLoadTask();
         }
 	}
 	
+	private void executeDataLoadTask() {
+		if(NetConnectionUtil.haveNetConnection(mContext)) {
+			mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
+			try {
+				String url = mSportsCarLoadTask.setupRequest() + mId;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+					SDK11.executeOnThreadPool(mSportsCarLoadTask, url);
+				} else {
+					mSportsCarLoadTask.execute(url);
+				}
+			} catch (RejectedExecutionException e) {
+			}
+		} else {
+			offlineSetData(mId);
+		}
+	}
 	private void offlineSetData(String id) {
 		Cursor cursor = mDatabaseHelper.getDetailById(SQLiteHelper.TABLE_SPORTS_CAR, id);
 		if(cursor != null && cursor.moveToFirst()) {
@@ -127,10 +148,8 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 	
 	private class SportsCarLoadTask extends AsyncTaskHelper {
 
-		private String id;
-		public SportsCarLoadTask(Context context, boolean genericLoad, String id) {
+		public SportsCarLoadTask(Context context, boolean genericLoad) {
 			super(context, genericLoad);
-			this.id = id;
 		}
 
 		@Override
@@ -151,13 +170,14 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 				}
 			} else {
 				dismissProgressDialog(mProgressDialog);
-				offlineSetData(id);
+				offlineSetData(mId);
 			}
 		}
 		
 		@Override
 		protected void onPostExecute(Void unusedresult) {
 			super.onPostExecute(unusedresult);
+			mPullRefreshScrollView.onRefreshComplete();
 		}
 
 		@Override
@@ -177,7 +197,7 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 				runOnUiThread(new Runnable() {
 					public void run() {
 						dismissProgressDialog(mProgressDialog);
-						offlineSetData(id);
+						offlineSetData(mId);
 					}
 				});
 			}
@@ -200,6 +220,9 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 	
 	private boolean findViewCorrectly() {
 		try {
+			mPullRefreshScrollView = (PullToRefreshScrollView) findViewById(R.id.detailview);
+			hiUser = (TextView) findViewById(R.id.hiUser);
+			ivLogOut = (ImageView) findViewById(R.id.ivLogOut);
 			manufacturerModel = (TextView) findViewById(R.id.manufacturerModel);
 			model = (TextView) findViewById(R.id.model);
 			manufacturer = (TextView) findViewById(R.id.manufacturer);

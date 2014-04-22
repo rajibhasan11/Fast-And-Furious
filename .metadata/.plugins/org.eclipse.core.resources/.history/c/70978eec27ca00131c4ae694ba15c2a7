@@ -1,0 +1,173 @@
+<com.handmark.pulltorefresh.library.PullToRefreshScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rowContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+    android:orientation="vertical"
+    android:padding="0dip"
+    android:divider="#19000000"
+    android:dividerPadding="4dp"
+    android:fadingEdge="none"
+    android:fadingEdgeLength="0dip"
+    android:soundEffectsEnabled="false"
+    android:visibility="visible"
+    ptr:ptrAnimationStyle="flip"
+    ptr:ptrHeaderBackground="@color/ptr_header_bg_color"
+    ptr:ptrHeaderSubTextColor="@color/ptr_header_subtext_color"
+    ptr:ptrHeaderTextColor="@color/ptr_header_text_color"
+    ptr:ptrShowIndicator="false"
+    tools:context=".SportsCarListActivity" >
+
+    <include
+        android:id="@+id/navBar"
+        layout="@layout/navbar" />
+
+    <TextView
+        android:id="@+id/manufacturerModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#666666"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:padding="10dip"
+        android:singleLine="true"
+        android:text="@string/detailview_header"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:id="@+id/modelLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/model_label"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:id="@+id/manufacturerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/manufacturer_label"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/manufacturer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:id="@+id/styleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/style_label"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:id="@+id/originLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/country_of_origin_label"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/origin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</LinearLayout>
