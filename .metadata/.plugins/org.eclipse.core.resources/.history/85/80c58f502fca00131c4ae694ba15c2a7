@@ -22,7 +22,7 @@
         ptr:ptrHeaderBackground="@color/ptr_header_bg_color"
         ptr:ptrHeaderSubTextColor="@color/ptr_header_subtext_color"
         ptr:ptrHeaderTextColor="@color/ptr_header_text_color"
-        ptr:ptrShowIndicator="false" >
+        ptr:ptrShowIndicator="true" >
 
         <RelativeLayout
             android:layout_width="match_parent"
