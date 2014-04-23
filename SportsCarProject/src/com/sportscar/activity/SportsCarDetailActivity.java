@@ -106,8 +106,25 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
         }
 	}
 	
+	@Override
+	protected void onDestroy() {
+		if(mSportsCarLoadTask != null) {
+			mSportsCarLoadTask.cancel(true);
+		}
+		super.onDestroy();
+	}
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
 	private void executeDataLoadTask() {
 		if(NetConnectionUtil.haveNetConnection(mContext)) {
+			if(mSportsCarLoadTask != null) {
+				mSportsCarLoadTask.cancel(true);
+			}
 			mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
 			try {
 				String url = mSportsCarLoadTask.setupRequest() + mId;
@@ -144,6 +161,9 @@ public class SportsCarDetailActivity extends FragmentActivity implements ISports
 		Intent in = new Intent(mContext, LoginViewActivity.class);
 		startActivity(in);
 		finish();
+		if(SportsCarListActivity.getActivity() != null) {
+			SportsCarListActivity.getActivity().finish();
+		}
 	}
 	
 	private class SportsCarLoadTask extends AsyncTaskHelper {

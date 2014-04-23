@@ -54,7 +54,7 @@ import com.sportscar.utils.StringsUtils;
 public class SportsCarListActivity extends FragmentActivity implements ISportsCar {
 
 	private SQLiteHelper mDatabaseHelper;
-	private Activity activity;
+	private static Activity activity;
 	private Context mContext;
 	private SportsCarAdapter mSportsCarAdapter;
 	private SportsCarLoadTask mSportsCarLoadTask;
@@ -79,7 +79,7 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 			@Override
 			public void onClick(View view) {
 				if(view != null) {
-					executeCarsLoadTask();
+					executeDataLoadTask();
 				}
 			}
 		});
@@ -119,7 +119,7 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 								| DateUtils.FORMAT_SHOW_DATE
 								| DateUtils.FORMAT_ABBREV_ALL);
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				executeCarsLoadTask();
+				executeDataLoadTask();
 			}
 		});
         
@@ -143,10 +143,10 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
 				startActivity(intent);
 			}
 		});
-        executeCarsLoadTask();
+        executeDataLoadTask();
     }
     
-    private void executeCarsLoadTask() {
+    private void executeDataLoadTask() {
     	if(mSportsCarLoadTask != null) {
     		mSportsCarLoadTask.cancel(true);
     	}
@@ -282,9 +282,22 @@ public class SportsCarListActivity extends FragmentActivity implements ISportsCa
     	android.util.Log.e("", stringParam);
     }
     
-    private Activity getActivity() {
+    public static Activity getActivity() {
     	return activity;
     }
+    
+    @Override
+	protected void onDestroy() {
+		if(mSportsCarLoadTask != null) {
+			mSportsCarLoadTask.cancel(true);
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
     
     private void handleExceptions() {
     	if(mPullRefreshListView != null && tvErrorMsg != null) {

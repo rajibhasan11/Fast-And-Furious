@@ -1,0 +1,296 @@
+/********************************************************
+ * 
+ * 
+ * @author: Mohammad Hasan Khan email: rajibhasan11@gmail.com
+ * @date: 19/04/2014
+ * 
+ * ********************************************/
+package com.sportscar.activity;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.RejectedExecutionException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
+import android.text.format.DateUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.sportscar.app.AsyncTaskHelper;
+import com.sportscar.app.ISportsCar;
+import com.sportscar.app.R;
+import com.sportscar.app.SportsCarAdapter;
+import com.sportscar.database.DBLogin;
+import com.sportscar.database.SQLiteHelper;
+import com.sportscar.utils.CursorUtils;
+import com.sportscar.utils.NetConnectionUtil;
+import com.sportscar.utils.SDK11;
+import com.sportscar.utils.SessionProvider;
+import com.sportscar.utils.StringsUtils;
+
+public class SportsCarListActivity extends FragmentActivity implements ISportsCar {
+
+	private SQLiteHelper mDatabaseHelper;
+	private Activity activity;
+	private Context mContext;
+	private SportsCarAdapter mSportsCarAdapter;
+	private SportsCarLoadTask mSportsCarLoadTask;
+	private ListView mListView;
+	
+	private PullToRefreshListView mPullRefreshListView;
+	private TextView tvErrorMsg, hiUser;
+	private ImageView ivLogOut;
+	private DBLogin dbLogin;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+        activity = this;
+        setContentView(R.layout.sports_car_listview_layout);
+        
+        dbLogin = new DBLogin(mContext);
+        mDatabaseHelper = SQLiteHelper.getInstance(mContext);
+        tvErrorMsg = (TextView) findViewById(R.id.errorMessage);
+        tvErrorMsg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(view != null) {
+					executeCarsLoadTask();
+				}
+			}
+		});
+        
+        // Set greetings
+        hiUser = (TextView) findViewById(R.id.hiUser);
+        HashMap<String, String> loginMap = SessionProvider.sessionManager(mContext);
+		if (loginMap.size() > 1) {
+			String userFirstName = loginMap.get(DBLogin.KEY_USER_FIRST_NAME);
+			if(!TextUtils.isEmpty(userFirstName)) {
+				hiUser.setText(getString(R.string.hi) + " " + StringsUtils.capitalizeFirstLetter(userFirstName));
+				hiUser.setVisibility(View.VISIBLE);
+			}
+		}
+		
+		// Set logout functionality
+        ivLogOut = (ImageView) findViewById(R.id.ivLogOut);
+        ivLogOut.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(view != null) {
+					removeSession();
+				}
+			}
+		});
+        
+        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.ptrListView);
+		mListView = mPullRefreshListView.getRefreshableView();
+		
+		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(
+						getApplicationContext(),
+						System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+				executeCarsLoadTask();
+			}
+		});
+        
+        // Set header
+        TextView tvHeader = new TextView(mContext);
+        tvHeader.setText(getString(R.string.listview_header));
+        tvHeader.setSingleLine();
+        tvHeader.setTextColor(Color.parseColor("#f5f5f5"));
+        tvHeader.setBackgroundColor(Color.parseColor("#666666"));
+        tvHeader.setTextSize(26);
+        tvHeader.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+        tvHeader.setPadding(10, 10, 10, 10);
+        mListView.addHeaderView(tvHeader, null, false);
+        
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+				String index = (String) view.getTag(R.id.id);
+				Log(index + " onClick");
+				Intent intent = new Intent(mContext, SportsCarDetailActivity.class);
+				intent.putExtra(ID, index);
+				startActivity(intent);
+			}
+		});
+        executeCarsLoadTask();
+    }
+    
+    private void executeCarsLoadTask() {
+    	if(mSportsCarLoadTask != null) {
+    		mSportsCarLoadTask.cancel(true);
+    	}
+    	mSportsCarLoadTask = new SportsCarLoadTask(mContext, true);
+		try {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				SDK11.executeOnThreadPool(mSportsCarLoadTask, mSportsCarLoadTask.setupRequest());
+			} else {
+				mSportsCarLoadTask.execute(mSportsCarLoadTask.setupRequest());
+			}
+		} catch (RejectedExecutionException e) {
+		}
+    }
+    
+    private void removeSession() {
+		dbLogin.deleteAllRows();
+		Intent in = new Intent(mContext, LoginViewActivity.class);
+		startActivity(in);
+		finish();
+	}
+    
+    private int getListRow() {
+    	return R.layout.sports_car_list_row_layout;
+    }
+    
+    private class SportsCarLoadTask extends AsyncTaskHelper {
+
+		public SportsCarLoadTask(Context context, boolean genericLoad) {
+			super(context, genericLoad);
+		}
+
+		@Override
+		public void onPrePostExecute(CopyOnWriteArrayList<ConcurrentHashMap<String, String>> result) {
+			if(result != null && result.size() > 0){
+				mSportsCarAdapter = new SportsCarAdapter(mContext, getListRow(), result);
+				mListView.setAdapter(mSportsCarAdapter);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
+	    		tvErrorMsg.setVisibility(View.GONE);
+			} else {
+				dismissProgressDialog(mProgressDialog);
+				offlineListView();
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Void unusedresult) {
+			super.onPostExecute(unusedresult);
+			mPullRefreshListView.onRefreshComplete();
+		}
+
+		@Override
+		protected Void doInBackground(final String... urls) {
+			Log("" + "URL CALLED: " + urls[0]);
+			// ONLINE CASE
+			if (NetConnectionUtil.haveNetConnection(mContext)) {
+				final CopyOnWriteArrayList<ConcurrentHashMap<String, String>> mDataSet = parseJSON(queryRESTurl(
+						getActivity(), urls[0], null, null));
+				runOnUiThread(new Runnable() {
+					public void run() {
+						onPrePostExecute(mDataSet);
+					}
+				});
+				// TODO
+				mDatabaseHelper.deleteAllFromTable(SQLiteHelper.TABLE_SPORTS_CAR);
+				mDatabaseHelper.createOrUpdate2(mDataSet, SQLiteHelper.TABLE_SPORTS_CAR);
+			} else {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						dismissProgressDialog(mProgressDialog);
+						offlineListView();
+					}
+				});
+			}
+			return (null);
+		}
+
+		@Override
+		public String setupRequest() {
+			return getBaseUrl() + "sportscar/selectAll";
+		}
+    	
+    }
+    
+    @SuppressWarnings("rawtypes")
+	private CopyOnWriteArrayList<ConcurrentHashMap<String, String>> parseJSON(final String json) {
+		CopyOnWriteArrayList<ConcurrentHashMap<String, String>> mDataSetJSON = new CopyOnWriteArrayList<ConcurrentHashMap<String, String>>();
+		try {
+			JSONObject jObject = new JSONObject(json);
+			Iterator keys = jObject.keys();
+			while(keys.hasNext()) {
+				String currentKey = (String) keys.next();
+				if(currentKey.equalsIgnoreCase(ISportsCar.SPORTSCAR)) {
+					JSONArray mJSONData = jObject.getJSONArray(currentKey);
+					for(int i = 0; i < mJSONData.length(); i++){
+						JSONObject innerJObject = mJSONData.getJSONObject(i);
+						Iterator innerKeys = innerJObject.keys();
+						ConcurrentHashMap<String, String> dataMap = new ConcurrentHashMap<String, String>();
+						while(innerKeys.hasNext()) {
+							String currentInnerKey = (String)innerKeys.next();
+							dataMap.put(currentInnerKey, innerJObject.optString(currentInnerKey));
+						}
+						mDataSetJSON.add(dataMap);
+					}
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return mDataSetJSON;
+    }
+    
+    public void offlineListView() {
+		// OFFLINE CASE
+		Cursor c = mDatabaseHelper.getAllCars();
+		try {
+			if (c.getCount() > 0) {
+				mSportsCarAdapter = new SportsCarAdapter(mContext, getListRow(), CursorUtils.converter(c));
+				mListView.setAdapter(mSportsCarAdapter);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
+	    		tvErrorMsg.setVisibility(View.GONE);
+			} else {
+				// NO DATA OFFLINE CASE
+				handleExceptions();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mPullRefreshListView.onRefreshComplete();
+		CursorUtils.manageCursor(c);
+	}
+    
+    void Log(String stringParam) {
+    	android.util.Log.e("", stringParam);
+    }
+    
+    private Activity getActivity() {
+    	return activity;
+    }
+    
+    private void handleExceptions() {
+    	if(mPullRefreshListView != null && tvErrorMsg != null) {
+    		mPullRefreshListView.setVisibility(View.GONE);
+    		tvErrorMsg.setVisibility(View.VISIBLE);
+    	}
+    }
+    
+}
