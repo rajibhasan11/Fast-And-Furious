@@ -94,8 +94,6 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User postUser(MultivaluedMap<String, String> userParams) {
 
-		// String firstName = userParams.getFirst(FIRST_NAME);
-		// String lastName = userParams.getFirst(LAST_NAME);
 		String email = userParams.getFirst(EMAIL);
 		String password = userParams.getFirst(PASSWORD);
 		
@@ -107,16 +105,6 @@ public class UserResource {
 		if(gotUser != null) {
 			return gotUser;
 		}
-		
-		/*user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setEmail(email);
-		user.setPassword(password);
-	
-		// TODO
-		usercrud.insert(user);
-
-		System.out.println("user info: " + user.getFirstName() + " " + user.getLastName() + " " + user.getEmail());*/
 
 		return null;
 

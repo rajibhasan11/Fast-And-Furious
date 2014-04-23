@@ -56,7 +56,6 @@ public class SportsCarAdapter extends ArrayAdapter implements ISportsCar {
 		return ((position%2)==0) ? 0 : 1;
 	}
 	
-	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = null;

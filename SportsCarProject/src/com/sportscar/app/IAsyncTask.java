@@ -16,8 +16,7 @@ import android.view.View;
 
 public interface IAsyncTask {
 	
-	// String BASEURL = "http://180.234.41.33:8080/RESTJersyWebServices/rest/"; // For Real Client
-	
+
 	// String BASEURL = "http://192.168.10.1:8080/RESTJersyWebServices/rest/"; // For Real Client
 	
 	// String BASEURL = "http://localhost:8080/RESTJersyWebServices/rest/"; // For Real Device

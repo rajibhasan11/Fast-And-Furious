@@ -700,3 +700,25 @@ java.lang.IllegalStateException: ScrollView can host only one direct child
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1386)
+!SESSION 2014-04-23 07:09:12.068 -----------------------------------------------
+eclipse.buildId=M20120208-0800
+java.version=1.6.0_45
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=it_IT
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2014-04-23 07:16:58.028
+!MESSAGE No valid Android XML Editor Delegate found for file /RESTJersyWebServices/src/SqlMapConfig.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2014-04-23 07:34:31.118
+!MESSAGE No valid Android XML Editor Delegate found for file /Servers/Tomcat v7.0 Server at localhost-config/context.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2014-04-23 07:35:01.775
+!MESSAGE No valid Android XML Editor Delegate found for file /Servers/Tomcat v7.0 Server at localhost-config/web.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2014-04-23 07:35:12.502
+!MESSAGE No valid Android XML Editor Delegate found for file /RESTJersyWebServices/WebContent/WEB-INF/web.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2014-04-23 09:28:57.948
+!MESSAGE No valid Android XML Editor Delegate found for file /RESTJersyWebServices/src/SqlMapConfig.xml [Res null, type null]

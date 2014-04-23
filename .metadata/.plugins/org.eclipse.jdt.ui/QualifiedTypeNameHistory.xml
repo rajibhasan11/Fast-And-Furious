@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.handmark.pulltorefresh.library.PullToRefreshBase"/>
+<fullyQualifiedTypeName name="com.handmark.pulltorefresh.library.PullToRefreshScrollView"/>
+<fullyQualifiedTypeName name="android.widget.ScrollView"/>
+<fullyQualifiedTypeName name="com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener"/>
+<fullyQualifiedTypeName name="android.text.format.DateUtils"/>
+<fullyQualifiedTypeName name="android.text.TextUtils"/>
+</qualifiedTypeNameHistroy>

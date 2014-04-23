@@ -30,6 +30,8 @@ import android.view.View;
 import com.mkh.customdialogs.CustomProgressDialog;
 import com.sportscar.utils.NetConnectionUtil;
 
+
+                                                            //  (<doInBackground, onProgressUpdate, onPostExecute>)
 public abstract class AsyncTaskHelper extends android.os.AsyncTask<String, Integer, Void> implements IAsyncTask {
 	
 	protected CustomProgressDialog mProgressDialog;
